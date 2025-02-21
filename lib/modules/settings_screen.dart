@@ -2,10 +2,6 @@ import 'package:final_flutter_two_nesma/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-
 class SettingsScreen extends StatelessWidget {
   final SettingsController settingsController = Get.put(SettingsController());
 
@@ -20,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-        
+     
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -35,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-        
+    
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -47,6 +43,22 @@ class SettingsScreen extends StatelessWidget {
                       },
                     )),
               ],
+            ),
+
+            const SizedBox(height: 30),
+
+            // ✅ زر الحفظ
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              ),
+              onPressed: () {
+                settingsController.saveSettings();
+                Get.snackbar("Settings Saved", "Your preferences have been saved!",
+                    snackPosition: SnackPosition.BOTTOM);
+              },
+              child: const Text("SAVE SETTINGS", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

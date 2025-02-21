@@ -17,10 +17,18 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/logo.png', 
-              height: 80,
-            ),
+           Container(
+          width: 100, 
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.black, 
+            borderRadius: BorderRadius.circular(20), 
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20), 
+            child: Image.asset("assets/logo2.png", fit: BoxFit.contain),
+          ),
+        ),
             const SizedBox(height: 10),
             const Text(
               'Test App',
