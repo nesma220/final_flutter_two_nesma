@@ -29,9 +29,21 @@ class _CartScreenState extends State<CartScreen> {
   double discount = 0.0;
 
   void applyDiscount() {
-    if (couponController.text == "1635") {
+    String code = couponController.text.trim();
+
+    if (code == "A123") {
       setState(() {
-        discount = 0.25; 
+        discount = 0.10;
+      });
+      showDiscountPopup(true);
+    } else if (code == "B123") {
+      setState(() {
+        discount = 0.20;
+      });
+      showDiscountPopup(true);
+    } else if (code == "C123") {
+      setState(() {
+        discount = 0.30;
       });
       showDiscountPopup(true);
     } else {
@@ -55,7 +67,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               const SizedBox(height: 15),
               Text(
-                isSuccess ? "Successfully Discount completed." : "Coupon is not active",
+                isSuccess ? "Successfully Discount applied!" : "Invalid Coupon Code!",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -79,24 +91,25 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-void clearCart() {
-  setState(() {
-    cartItems.clear();
-  });
-  Get.snackbar("Cart Cleared", "The List is Empty",
-      snackPosition: SnackPosition.BOTTOM);
-}
-
-
- void removeItem(int index) {
-  setState(() {
-    cartItems.removeAt(index);
-  });
-}
-  double get totalPrice {
-    double total = cartItems.fold(0, (sum, item) => sum + item["price"]);
-    return total - (total * discount);
+  void clearCart() {
+    setState(() {
+      cartItems.clear();
+    });
+    Get.snackbar("Cart Cleared", "The List is Empty",
+        snackPosition: SnackPosition.BOTTOM);
   }
+
+  void removeItem(int index) {
+    setState(() {
+      cartItems.removeAt(index);
+    });
+  }
+
+double get totalPrice {
+  double total = cartItems.fold<double>(0.0, (sum, item) => sum + (item["price"] as num).toDouble());
+  return total - (total * discount);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +123,7 @@ void clearCart() {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          "Card",
+          "Cart",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -213,13 +226,19 @@ void clearCart() {
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     if (discount > 0)
-                      Text(
-                        " 800 SR",
-                        style: TextStyle(
-                            fontSize: 16,
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey[500]),
-                      ),
+                     Text(
+  "${totalPrice.toInt()} SR",
+  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+),
+if (discount > 0)
+  Text(
+    " ${(cartItems.fold<num>(0, (sum, item) => sum + (item["price"] as num)).toInt())} SR",
+    style: TextStyle(
+        fontSize: 16,
+        decoration: TextDecoration.lineThrough,
+        color: Colors.grey[500]),
+  ),
+
                   ],
                 ),
               ],
@@ -259,24 +278,12 @@ void clearCart() {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item["title"],
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold)),
-                Text(item["location"], style: TextStyle(color: Colors.grey[600])),
-                const SizedBox(height: 5),
-                Text("${item["price"]} SR",
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
+            child: Text(item["title"]),
           ),
-       IconButton(
-  onPressed: () => removeItem(index),
-  icon: const Icon(Icons.delete, color: Colors.red),
-),
+          IconButton(
+            onPressed: () => removeItem(index),
+            icon: const Icon(Icons.delete, color: Colors.red),
+          ),
         ],
       ),
     );
