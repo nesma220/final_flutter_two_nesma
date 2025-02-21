@@ -12,7 +12,7 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
-  // **📌 قائمة الأحداث مع معلومات كل حدث**
+
   final List<Map<String, dynamic>> events = [
     {
       "image": "assets/event1.png",
