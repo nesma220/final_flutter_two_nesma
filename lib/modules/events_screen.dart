@@ -78,17 +78,18 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+     backgroundColor: Theme.of(context).colorScheme.surface,
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title:  Text(
           "Events",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -241,20 +242,20 @@ class _EventsScreenState extends State<EventsScreen> {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
         ),
         child: Center(
           child: TextButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return CartScreen();
+                  return const CartScreen();
                 },
               ));
             },
-            child: Text(
+            child: const Text(
               "GO TO CARD",
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

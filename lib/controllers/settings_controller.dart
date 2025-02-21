@@ -1,40 +1,64 @@
+import 'package:final_flutter_two_nesma/utils/app_const.dart';
+import 'package:final_flutter_two_nesma/utils/lang_model/lang_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsController extends GetxController {
+
+
+class SettingsController extends GetxController implements GetxService {
+  SettingsController() {
+    loadCurrentLanguage();
+  }
   var selectedLanguage = 'en'.obs;
   var isDarkMode = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadSettings(); 
-  }
-
-  void changeLanguage(String langCode) async {
+  void changeLanguage(String langCode) {
     selectedLanguage.value = langCode;
     Get.updateLocale(Locale(langCode));
-    saveSettings(); 
   }
 
-  void toggleTheme() {
-    isDarkMode.value = !isDarkMode.value;
-    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
-    saveSettings(); 
+
+  Rx<ThemeMode> currentTheme = ThemeMode.system.obs;
+
+
+  void switchTheme() {
+    currentTheme.value = currentTheme.value == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
   }
 
-  Future<void> saveSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('language', selectedLanguage.value);
-    await prefs.setBool('darkMode', isDarkMode.value);
+  Locale _locale = Locale(AppConstants.languages[0].languageCode,
+      AppConstants.languages[0].countryCode);
+
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+  List<LanguageModel> _languages = [];
+  Locale get locale => _locale;
+  List<LanguageModel> get languages => _languages;
+
+  void loadCurrentLanguage() {
+
+
+    for (int index = 0; index < AppConstants.languages.length; index++) {
+      if (AppConstants.languages[index].languageCode == _locale.languageCode) {
+        _selectedIndex = index;
+        break;
+      }
+    }
+    _languages = [];
+    _languages.addAll(AppConstants.languages);
+    update();
   }
 
-  Future<void> loadSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    selectedLanguage.value = prefs.getString('language') ?? 'en';
-    isDarkMode.value = prefs.getBool('darkMode') ?? false;
-    Get.updateLocale(Locale(selectedLanguage.value));
-    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
+  void setLanguage(Locale locale) {
+    Get.updateLocale(locale);
+    _locale = locale;
+
+    update();
+  }
+
+  void setSelectedIndex(int index) {
+    _selectedIndex = index;
+    update();
   }
 }
